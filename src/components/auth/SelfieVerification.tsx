@@ -136,23 +136,35 @@ const SelfieVerification = ({
   }, []);
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-background">
-      <CardHeader>
-        <CardTitle className="text-center">Selfie Verification</CardTitle>
-        <CardDescription className="text-center">
-          Please take a clear selfie to verify your identity
+    <Card className="w-full max-w-md mx-auto bg-white/90 backdrop-blur-sm border-0 shadow-xl rounded-2xl">
+      <CardHeader className="text-center pb-6">
+        <div className="flex items-center justify-center mb-4">
+          <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-full">
+            <Camera className="h-6 w-6 text-white" />
+          </div>
+        </div>
+        <CardTitle className="text-2xl font-bold text-gray-800">
+          📸 Selfie Verification
+        </CardTitle>
+        <CardDescription className="text-gray-600 text-base mt-2">
+          Take a clear selfie to verify your identity
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex flex-col items-center">
+      <CardContent className="flex flex-col items-center px-6">
         {error && (
-          <Alert variant="destructive" className="mb-4">
+          <Alert
+            variant="destructive"
+            className="mb-6 border-red-200 bg-red-50"
+          >
             <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription className="text-red-700">
+              {error}
+            </AlertDescription>
           </Alert>
         )}
 
-        <div className="relative w-full aspect-square max-w-xs mx-auto rounded-lg overflow-hidden bg-muted mb-4">
+        <div className="relative w-full aspect-square max-w-xs mx-auto rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 mb-6 shadow-inner border-4 border-white">
           {!capturedImage && isCameraActive ? (
             <video
               ref={videoRef}
@@ -189,36 +201,55 @@ const SelfieVerification = ({
         {/* Hidden canvas for capturing frames */}
         <canvas ref={canvasRef} className="hidden" />
 
-        <div className="text-center mt-2">
+        <div className="text-center mt-4">
           {verificationStatus === "idle" && (
-            <p className="text-sm text-muted-foreground">
-              Ensure your face is clearly visible and well-lit
-            </p>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600 font-medium">
+                📋 Selfie Guidelines:
+              </p>
+              <ul className="text-xs text-gray-500 space-y-1">
+                <li>• Face clearly visible and well-lit</li>
+                <li>• Look directly at the camera</li>
+                <li>• Remove sunglasses or hat</li>
+              </ul>
+            </div>
           )}
 
           {verificationStatus === "processing" && (
-            <p className="text-sm font-medium">Verifying your selfie...</p>
+            <div className="flex items-center justify-center space-x-2">
+              <RefreshCw className="h-4 w-4 animate-spin text-blue-600" />
+              <p className="text-sm font-medium text-blue-600">
+                Analyzing your selfie...
+              </p>
+            </div>
           )}
 
           {verificationStatus === "success" && (
-            <p className="text-sm font-medium text-green-600">
-              Verification successful!
-            </p>
+            <div className="flex items-center justify-center space-x-2">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              <p className="text-sm font-medium text-green-600">
+                ✅ Verification successful!
+              </p>
+            </div>
           )}
 
           {verificationStatus === "failed" && (
-            <p className="text-sm font-medium text-destructive">
-              Verification failed. Please try again.
-            </p>
+            <div className="flex items-center justify-center space-x-2">
+              <AlertCircle className="h-4 w-4 text-red-600" />
+              <p className="text-sm font-medium text-red-600">
+                ❌ Verification failed. Please try again.
+              </p>
+            </div>
           )}
         </div>
       </CardContent>
 
-      <CardFooter className="flex justify-between">
+      <CardFooter className="flex justify-between px-6 pb-6">
         <Button
           variant="outline"
           onClick={onCancel}
           disabled={isProcessing || verificationStatus === "success"}
+          className="rounded-xl border-gray-200 hover:bg-gray-50 transition-all duration-200"
         >
           Cancel
         </Button>
@@ -227,19 +258,26 @@ const SelfieVerification = ({
           <Button
             onClick={captureSelfie}
             disabled={!isCameraActive || isProcessing}
+            className="rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
           >
             <Camera className="mr-2 h-4 w-4" />
-            Take Selfie
+            📸 Capture Selfie
           </Button>
         ) : verificationStatus !== "success" ? (
-          <Button onClick={retakeSelfie} disabled={isProcessing}>
+          <Button
+            onClick={retakeSelfie}
+            disabled={isProcessing}
+            className="rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+          >
             <RefreshCw className="mr-2 h-4 w-4" />
-            Retake
+            🔄 Retake
           </Button>
         ) : (
-          <Button disabled>
-            <CheckCircle className="mr-2 h-4 w-4" />
-            Verified
+          <Button
+            disabled
+            className="rounded-xl bg-green-500 text-white cursor-not-allowed"
+          >
+            <CheckCircle className="mr-2 h-4 w-4" />✅ Verified
           </Button>
         )}
       </CardFooter>
