@@ -34,11 +34,13 @@ interface SubscriptionPlan {
 
 interface SubscriptionSelectionProps {
   onSubscribe?: (plan: SubscriptionPlan) => void;
+  onComplete?: () => void;
   onCancel?: () => void;
 }
 
 const SubscriptionSelection = ({
   onSubscribe = () => {},
+  onComplete = () => {},
   onCancel = () => {},
 }: SubscriptionSelectionProps) => {
   const [selectedVehicleType, setSelectedVehicleType] = useState<
@@ -165,6 +167,7 @@ const SubscriptionSelection = ({
   const handlePayment = () => {
     if (selectedPlan) {
       onSubscribe(selectedPlan);
+      onComplete();
       setPaymentDialogOpen(false);
     }
   };

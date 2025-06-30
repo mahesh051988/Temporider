@@ -22,12 +22,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface PhoneVerificationProps {
   onVerificationComplete?: () => void;
+  onComplete?: () => void;
   onBack?: () => void;
   userType?: "rider" | "driver";
 }
 
 const PhoneVerification = ({
   onVerificationComplete = () => {},
+  onComplete = () => {},
   onBack = () => {},
   userType = "rider",
 }: PhoneVerificationProps) => {
@@ -136,6 +138,7 @@ const PhoneVerification = ({
     setTimeout(() => {
       setIsLoading(false);
       onVerificationComplete();
+      onComplete();
     }, 1500);
   };
 
